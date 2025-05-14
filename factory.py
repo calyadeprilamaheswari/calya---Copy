@@ -1,7 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 def create_app():
     app = Flask(__name__)
@@ -10,41 +12,116 @@ def create_app():
     app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     db.init_app(app)
 
+    # Initialize Flask-Login
+    login_manager.init_app(app)
+    login_manager.login_view = 'auth.login'
+    login_manager.login_message_category = 'info'
+
     with app.app_context():
-        from models import User  # ...existing code...
-        db.create_all()  # Membuat tabel jika belum ada
+        from models import User
+        db.create_all()
+        # Pastikan anda menghapus file "user.db" lama
+        if not User.query.filter_by(username="admin").first():
+            admin = User(username="admin", password="admin123", role="admin", status="accepted")
+            db.session.add(admin)
+            db.session.commit()
 
     @app.route('/')
     def home():
-        # Menggunakan template base.html untuk menampilkan halaman utama.
         return render_template("base.html")
 
     @app.route('/login', methods=['GET', 'POST'])
     def login():
+        from models import User
+        from flask import session
         if request.method == 'POST':
-            # ...existing code untuk proses login, misalnya validasi...
-            return redirect(url_for('student_verification'))
+            username = request.form.get("username")
+            password = request.form.get("password")
+            user = User.query.filter_by(username=username, password=password).first()
+            if user:
+                if user.role == "admin":
+                    flash("Gunakan halaman admin login untuk admin")
+                    return redirect(url_for("admin_login"))
+                session["user_id"] = user.id
+                return redirect(url_for("student_dashboard"))
+            flash("Invalid credentials")
+            return redirect(url_for("login"))
         return render_template("login.html")
-
+    
     @app.route('/register', methods=['GET', 'POST'])
     def register():
+        from models import User
         if request.method == 'POST':
-            return redirect(url_for('login'))
+            username = request.form.get("username")
+            password = request.form.get("password")
+            if User.query.filter_by(username=username).first():
+                flash("Username sudah digunakan")
+                return redirect(url_for("register"))
+            new_user = User(username=username, password=password, role="user", status="pending")
+            db.session.add(new_user)
+            db.session.commit()
+            flash("Pendaftaran berhasil, silahkan login")
+            return redirect(url_for("login"))
         return render_template("register.html")
 
+    # Tambahkan route admin_login untuk admin
+    @app.route('/admin_login', methods=['GET', 'POST'])
+    def admin_login():
+        from models import User
+        from flask import session
+        if request.method == 'POST':
+            username = request.form.get("username")
+            password = request.form.get("password")
+            user = User.query.filter_by(username=username, password=password, role="admin").first()
+            if user:
+                session["user_id"] = user.id
+                return redirect(url_for("admin_dashboard"))
+            else:
+                flash("Invalid admin credentials")
+                return redirect(url_for("admin_login"))
+        return render_template("admin_login.html")
+        
     @app.route('/student_verification', methods=['GET', 'POST'])
     def student_verification():
-        from flask import request, redirect, url_for, flash
+        from models import User
+        from flask import session
         if request.method == 'POST':
-            # ...tambahkan logika untuk memproses verifikasi...
-            flash("Verifikasi berhasil diajukan.")
-            return redirect(url_for('home'))
+            user_id = session.get("user_id")
+            if user_id:
+                user = User.query.get(user_id)
+                if user:
+                    # Simpan data form ke database
+                    user.full_name = request.form.get('full_name')
+                    user.phone = request.form.get('phone')
+                    user.address = request.form.get('address')
+                    user.jurusan = request.form.get('jurusan')
+                    user.status = "pending"
+                    db.session.commit()
+                    flash("Verifikasi Anda telah dikirim, silakan cek status di dashboard Anda.")
+                    return redirect(url_for('student_dashboard'))
+            else:
+                flash("Anda harus login terlebih dahulu untuk mengajukan verifikasi.")
+                return redirect(url_for('login'))
         return render_template("student_verification.html")
-
+        
+    # Tambahkan route student_dashboard untuk siswa
+    @app.route('/student_dashboard')
+    def student_dashboard():
+        from models import User
+        from flask import session
+        user_id = session.get("user_id")
+        if user_id:
+            user = User.query.get(user_id)
+            if user:
+                return render_template("student_dashboard.html", user=user)
+        flash("Anda harus login terlebih dahulu.")
+        return redirect(url_for('login'))
+        
     @app.route('/admin_dashboard')
     def admin_dashboard():
         from models import User
-        users = User.query.all()
+        # Tampilkan data siswa (non-admin) saja sehingga hanya data verifikasi yang diisi muncul
+        users = User.query.filter(User.role != 'admin').all()
         return render_template("admin_dashboard.html", users=users)
 
     @app.route('/admin/accept/<int:user_id>', methods=['POST'])
@@ -75,17 +152,13 @@ def create_app():
             return render_template("admin_detail.html", user=user)
         return redirect(url_for('admin_dashboard'))
 
-    @app.route('/pendaftaran', methods=['GET', 'POST'])
-    def pendaftaran():
-        from flask import request, redirect, url_for, flash
-        if request.method == 'POST':
-            # ...tambahkan logika untuk memproses data pendaftaran...
-            flash("Pendaftaran berhasil.")
-            return redirect(url_for('home'))
-        return render_template("pendaftaran.html")
-
     @app.errorhandler(404)
     def not_found(error):
         return ("The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.", 404)
 
     return app
+
+@login_manager.user_loader
+def load_user(user_id):
+    from models import User
+    return User.query.get(int(user_id))

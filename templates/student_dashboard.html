@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard - PPDB System{% endblock %}
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow">
+    <div class="card-header">
+      <h2>Student Dashboard</h2>
+    </div>
+    <div class="card-body">
+      <p>Welcome, {{ user.username }}!</p>
+      <p>Status Verifikasi: {{ user.status }}</p>
+      <!-- Tampilkan data verifikasi lain jika diperlukan -->
+    </div>
+  </div>
+</div>
+{% endblock %}

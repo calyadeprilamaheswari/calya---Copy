@@ -3,7 +3,6 @@
 <head>
   <title>Detail User</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- ...existing code... -->
 </head>
 <body>
   <div class="container mt-5">
@@ -12,10 +11,17 @@
         <h2>Detail User: {{ user.username }}</h2>
       </div>
       <div class="card-body">
+        <h4>Data Pribadi:</h4>
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Role:</strong> {{ user.role }}</p>
         <p><strong>Status:</strong> {{ user.status }}</p>
-        <!-- Opsi aksi hanya jika status masih pending -->
+        
+        <h4>Data Verifikasi:</h4>
+        <p><strong>Nama Lengkap:</strong> {{ user.full_name }}</p>
+        <p><strong>Telepon:</strong> {{ user.phone }}</p>
+        <p><strong>Alamat:</strong> {{ user.address }}</p>
+        <p><strong>Jurusan:</strong> {{ user.jurusan }}</p>
+
         {% if user.status == 'pending' %}
           <form action="/admin/accept/{{ user.id }}" method="POST" style="display:inline;">
             <button type="submit" class="btn btn-success">Terima</button>

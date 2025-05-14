@@ -27,19 +27,30 @@
         <ul class="list-group">
           {% for u in users %}
             <li class="list-group-item">
-              {{ u.username }} - {{ u.role }} - Status: {{ u.status }}
-              <!-- Tombol untuk detail -->
-              <a href="/admin/detail/{{ u.id }}" class="btn btn-sm btn-info ml-2">Detail</a>
-              {% if u.status == 'pending' %}
-                <!-- Tombol aksi untuk terima -->
-                <form action="/admin/accept/{{ u.id }}" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn-sm btn-success ml-2">Terima</button>
-                </form>
-                <!-- Tombol aksi untuk tolak -->
-                <form action="/admin/reject/{{ u.id }}" method="POST" style="display:inline;">
-                  <button type="submit" class="btn btn-sm btn-danger ml-2">Tolak</button>
-                </form>
-              {% endif %}
+              <div class="row">
+                <div class="col-md-4">
+                  <strong>{{ u.full_name or u.username }}</strong>
+                </div>
+                <div class="col-md-2">
+                  Status: <span class="badge badge-{{ 'success' if u.status == 'accepted' else 'warning' }}">{{ u.status }}</span>
+                </div>
+                <div class="col-md-2">
+                  Verifikasi: <span class="badge badge-{{ 'success' if u.is_verified else 'danger' }}">
+                    {{ 'Sudah' if u.is_verified else 'Belum' }}
+                  </span>
+                </div>
+                <div class="col-md-4">
+                  <a href="/admin/detail/{{ u.id }}" class="btn btn-sm btn-info">Detail</a>
+                  {% if u.status == 'pending' and u.is_verified %}
+                    <form action="/admin/accept/{{ u.id }}" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-success">Terima</button>
+                    </form>
+                    <form action="/admin/reject/{{ u.id }}" method="POST" style="display:inline;">
+                      <button type="submit" class="btn btn-sm btn-danger">Tolak</button>
+                    </form>
+                  {% endif %}
+                </div>
+              </div>
             </li>
           {% endfor %}
         </ul>
