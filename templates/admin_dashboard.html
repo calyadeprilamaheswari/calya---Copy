@@ -14,11 +14,33 @@
         <h2>Dashboard Admin</h2>
       </div>
       <div class="card-body">
-        <p>Selamat datang, {{ user.username }}!</p>
+        <!-- Menampilkan notifikasi -->
+        {% with messages = get_flashed_messages() %}
+          {% if messages %}
+            {% for msg in messages %}
+              <div class="alert alert-info">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        
         <h3>Daftar User Terdaftar:</h3>
         <ul class="list-group">
           {% for u in users %}
-            <li class="list-group-item">{{ u.username }} - {{ u.role }}</li>
+            <li class="list-group-item">
+              {{ u.username }} - {{ u.role }} - Status: {{ u.status }}
+              <!-- Tombol untuk detail -->
+              <a href="/admin/detail/{{ u.id }}" class="btn btn-sm btn-info ml-2">Detail</a>
+              {% if u.status == 'pending' %}
+                <!-- Tombol aksi untuk terima -->
+                <form action="/admin/accept/{{ u.id }}" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-success ml-2">Terima</button>
+                </form>
+                <!-- Tombol aksi untuk tolak -->
+                <form action="/admin/reject/{{ u.id }}" method="POST" style="display:inline;">
+                  <button type="submit" class="btn btn-sm btn-danger ml-2">Tolak</button>
+                </form>
+              {% endif %}
+            </li>
           {% endfor %}
         </ul>
         <a href="/logout" class="btn btn-danger mt-3">Logout</a>

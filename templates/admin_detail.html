@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Detail User</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <!-- ...existing code... -->
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header">
+        <h2>Detail User: {{ user.username }}</h2>
+      </div>
+      <div class="card-body">
+        <p><strong>Username:</strong> {{ user.username }}</p>
+        <p><strong>Role:</strong> {{ user.role }}</p>
+        <p><strong>Status:</strong> {{ user.status }}</p>
+        <!-- Opsi aksi hanya jika status masih pending -->
+        {% if user.status == 'pending' %}
+          <form action="/admin/accept/{{ user.id }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-success">Terima</button>
+          </form>
+          <form action="/admin/reject/{{ user.id }}" method="POST" style="display:inline;">
+            <button type="submit" class="btn btn-danger ml-2">Tolak</button>
+          </form>
+        {% endif %}
+        <a href="/admin_dashboard" class="btn btn-secondary mt-3">Kembali</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
