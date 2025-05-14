@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Dashboard Admin</title>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</head>
+<body>
+  <div class="container mt-5">
+    <div class="card shadow">
+      <div class="card-header">
+        <h2>Dashboard Admin</h2>
+      </div>
+      <div class="card-body">
+        <p>Selamat datang, {{ user.username }}!</p>
+        <h3>Daftar User Terdaftar:</h3>
+        <ul class="list-group">
+          {% for u in users %}
+            <li class="list-group-item">{{ u.username }} - {{ u.role }}</li>
+          {% endfor %}
+        </ul>
+        <a href="/logout" class="btn btn-danger mt-3">Logout</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
