@@ -14,6 +14,34 @@
         <h2>Dashboard Admin</h2>
       </div>
       <div class="card-body">
+        <!-- Statistik Pendaftaran -->
+        <div class="row mb-4">
+          <div class="col-md-4">
+            <div class="card bg-primary text-white">
+              <div class="card-body">
+                <h5 class="card-title">Total Pendaftar</h5>
+                <h2>{{ users|length }}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-success text-white">
+              <div class="card-body">
+                <h5 class="card-title">Siswa Diterima</h5>
+                <h2>{{ users|selectattr('status', 'equalto', 'accepted')|list|length }}</h2>
+              </div>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="card bg-danger text-white">
+              <div class="card-body">
+                <h5 class="card-title">Siswa Ditolak</h5>
+                <h2>{{ users|selectattr('status', 'equalto', 'rejected')|list|length }}</h2>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <!-- Menampilkan notifikasi -->
         {% with messages = get_flashed_messages() %}
           {% if messages %}

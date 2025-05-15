@@ -18,17 +18,93 @@
         
         <h4>Data Verifikasi:</h4>
         <p><strong>Nama Lengkap:</strong> {{ user.full_name }}</p>
+        <p><strong>Nama Ayah:</strong> {{ user.nama_ayah }}</p>
+        <p><strong>Nama Ibu:</strong> {{ user.nama_ibu }}</p>
+        <p><strong>Tempat, Tanggal Lahir:</strong> 
+          {{ user.tempat_lahir }}{% if user.tanggal_lahir %}, {{ user.tanggal_lahir.strftime('%d-%m-%Y') }}{% endif %}
+        </p>
+        <p><strong>Asal Sekolah:</strong> {{ user.asal_sekolah }}</p>
         <p><strong>Telepon:</strong> {{ user.phone }}</p>
         <p><strong>Alamat:</strong> {{ user.address }}</p>
         <p><strong>Jurusan:</strong> {{ user.jurusan }}</p>
 
+        <h4 class="mt-4">Dokumen:</h4>
+        <div class="row">
+          <!-- Ijazah -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5>Ijazah</h5>
+              </div>
+              <div class="card-body text-center">
+                {% if user.ijasah %}
+                  <img src="{{ url_for('static', filename='uploads/' + user.ijasah) }}" class="img-fluid mb-2" alt="Ijazah" style="max-height: 300px;">
+                  <div>
+                    <a href="{{ url_for('static', filename='uploads/' + user.ijasah) }}" class="btn btn-info" target="_blank">Lihat Full</a>
+                  </div>
+                {% else %}
+                  <p class="text-muted">Belum ada ijazah</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+
+          <!-- Foto Diri -->
+          <div class="col-md-6">
+            <div class="card">
+              <div class="card-header">
+                <h5>Foto Diri</h5>
+              </div>
+              <div class="card-body text-center">
+                {% if user.foto_diri %}
+                  <img src="{{ url_for('static', filename='uploads/' + user.foto_diri) }}" class="img-fluid mb-2" alt="Foto Diri" style="max-height: 300px;">
+                  <div>
+                    <a href="{{ url_for('static', filename='uploads/' + user.foto_diri) }}" class="btn btn-info" target="_blank">Lihat Full</a>
+                  </div>
+                {% else %}
+                  <p class="text-muted">Belum ada foto diri</p>
+                {% endif %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <h4 class="mt-4">Status Pembayaran:</h4>
+        <div class="card mb-4">
+          <div class="card-body">
+            <p><strong>Status Pembayaran:</strong> 
+              <span class="badge badge-{{ 'success' if user.payment_status == 'paid' else 'warning' if user.payment_status == 'pending' else 'danger' }}">
+                {{ user.payment_status|default('Belum Bayar') }}
+              </span>
+            </p>
+            {% if user.payment_proof %}
+              <p><strong>Bukti Pembayaran:</strong></p>
+              <img src="/static/uploads/{{ user.payment_proof }}" class="img-fluid mb-2" style="max-height: 300px;">
+              <div>
+                <a href="/static/uploads/{{ user.payment_proof }}" class="btn btn-info" target="_blank">Lihat Full</a>
+                {% if user.payment_status == 'pending' %}
+                  <form action="{{ url_for('verify_payment', user_id=user.id) }}" method="POST" class="d-inline">
+                    <button type="submit" class="btn btn-success">Verifikasi Pembayaran</button>
+                  </form>
+                {% endif %}
+              </div>
+            {% else %}
+              <p class="text-muted">Belum ada bukti pembayaran</p>
+            {% endif %}
+          </div>
+        </div>
+
         {% if user.status == 'pending' %}
           <form action="/admin/accept/{{ user.id }}" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-success">Terima</button>
+            <button type="submit" class="btn btn-success">Terima Siswa</button>
           </form>
           <form action="/admin/reject/{{ user.id }}" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-danger ml-2">Tolak</button>
+            <button type="submit" class="btn btn-danger ml-2">Tolak Siswa</button>
           </form>
+        {% elif user.status == 'accepted' %}
+          <div class="alert alert-success">
+            <strong>Status:</strong> Siswa ini telah diterima. Menunggu proses daftar ulang.
+          </div>
         {% endif %}
         <a href="/admin_dashboard" class="btn btn-secondary mt-3">Kembali</a>
       </div>

@@ -17,6 +17,18 @@ class User(UserMixin, db.Model):
     bukti_pembayaran = db.Column(db.String(200))
     ijasah = db.Column(db.String(200))
     foto_diri = db.Column(db.String(200))
+    # Tambah kolom baru
+    nama_ayah = db.Column(db.String(100))
+    nama_ibu = db.Column(db.String(100))
+    tempat_lahir = db.Column(db.String(100))
+    tanggal_lahir = db.Column(db.Date)
+    asal_sekolah = db.Column(db.String(200))
+    # Tambah kolom untuk pembayaran
+    payment_proof = db.Column(db.String(200))
+    payment_status = db.Column(db.String(20), default='unpaid')  # unpaid/pending/paid
+    bank_name = db.Column(db.String(50))
+    sender_name = db.Column(db.String(100))
+    payment_date = db.Column(db.DateTime)
 
     @property
     def is_profile_complete(self):

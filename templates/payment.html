@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Pembayaran - PPDB System</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    {% extends "base.html" %}
+    {% block title %}Pembayaran - PPDB System{% endblock %}
+
+    {% block content %}
+    <div class="container mt-5">
+        <div class="card shadow">
+            <div class="card-header">
+                <h2>Pembayaran Pendaftaran</h2>
+            </div>
+            <div class="card-body">
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ category if category != 'error' else 'danger' }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <div class="alert alert-info">
+                    <h4>Total Pembayaran: Rp. 500.000</h4>
+                    <p>Silakan transfer ke rekening berikut:</p>
+                    <ul>
+                        <li>Bank BCA: 1234567890</li>
+                        <li>Bank BNI: 0987654321</li>
+                        <li>Bank Mandiri: 1122334455</li>
+                    </ul>
+                </div>
+                
+                <form method="POST" action="{{ url_for('submit_payment') }}" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label>Nama Bank Pengirim:</label>
+                        <select name="bank_name" class="form-control" required>
+                            <option value="">-- Pilih Bank --</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BNI">BNI</option>
+                            <option value="Mandiri">Mandiri</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Nama Pengirim:</label>
+                        <input type="text" name="sender_name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Bukti Transfer:</label>
+                        <div class="custom-file">
+                            <input type="file" name="payment_proof" class="custom-file-input" id="payment_proof" accept="image/*" required>
+                            <label class="custom-file-label" for="payment_proof">Pilih file...</label>
+                        </div>
+                        <small class="form-text text-muted">Upload bukti transfer dalam format gambar (jpg, png, etc)</small>
+                    </div>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary">Submit Pembayaran</button>
+                        <!-- Hapus tombol kembali untuk mencegah user kembali ke halaman sebelumnya -->
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    document.querySelector('.custom-file-input').addEventListener('change', function(e) {
+        var fileName = e.target.files[0].name;
+        var label = e.target.nextElementSibling;
+        label.innerHTML = fileName;
+    });
+    </script>
+    {% endblock %}
+</body>
+</html>

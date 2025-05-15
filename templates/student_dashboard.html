@@ -1,15 +1,43 @@
 {% extends "base.html" %}
-{% block title %}Student Dashboard - PPDB System{% endblock %}
+{% block title %}Status Pendaftaran - PPDB System{% endblock %}
 {% block content %}
 <div class="container mt-5">
   <div class="card shadow">
     <div class="card-header">
-      <h2>Student Dashboard</h2>
+      <h2>Status Pendaftaran</h2>
     </div>
     <div class="card-body">
-      <p>Welcome, {{ user.username }}!</p>
-      <p>Status Verifikasi: {{ user.status }}</p>
-      <!-- Tampilkan data verifikasi lain jika diperlukan -->
+      <h4>Selamat datang, {{ user.full_name or user.username }}!</h4>
+
+      {% if user.status == 'pending' %}
+        <div class="alert alert-info">
+          <h5><i class="fas fa-clock"></i> Status: DALAM PROSES</h5>
+          <p>Data pendaftaran Anda:</p>
+          <ul>
+            <li><strong>Nama:</strong> {{ user.full_name }}</li>
+            <li><strong>Jurusan:</strong> {{ user.jurusan }}</li>
+            <li><strong>No. Telepon:</strong> {{ user.phone }}</li>
+          </ul>
+          <p>Pendaftaran Anda sedang dalam proses verifikasi. Silakan cek kembali dalam beberapa hari.</p>
+        </div>
+      {% elif user.status == 'accepted' %}
+        <div class="alert alert-success">
+          <h5><i class="fas fa-check-circle"></i> Status: DITERIMA</h5>
+          <p>Selamat! Anda telah diterima di jurusan {{ user.jurusan }}.</p>
+          {% if not user.payment_proof %}
+            <p>Silakan lakukan pembayaran daftar ulang:</p>
+            <a href="{{ url_for('payment') }}" class="btn btn-primary">Lakukan Pembayaran</a>
+          {% endif %}
+        </div>
+      {% elif user.status == 'rejected' %}
+        <div class="alert alert-danger">
+          <h5><i class="fas fa-times-circle"></i> Status: DITOLAK</h5>
+          <p>Mohon maaf, pendaftaran Anda tidak diterima.</p>
+          <p>Tetap semangat dan coba peruntungan di sekolah lain!</p>
+        </div>
+      {% endif %}
+      
+      <a href="{{ url_for('logout') }}" class="btn btn-danger mt-3">Logout</a>
     </div>
   </div>
 </div>
