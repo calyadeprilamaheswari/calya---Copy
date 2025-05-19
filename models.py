@@ -29,6 +29,7 @@ class User(UserMixin, db.Model):
     bank_name = db.Column(db.String(50))
     sender_name = db.Column(db.String(100))
     payment_date = db.Column(db.DateTime)
+    is_verified = db.Column(db.Boolean, default=False)  # Tambahkan kolom is_verified
 
     @property
     def is_profile_complete(self):

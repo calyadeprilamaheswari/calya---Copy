@@ -3,6 +3,32 @@
 <head>
     <title>Pembayaran - PPDB System</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .bank-card {
+            background: linear-gradient(45deg, #1a1a1a, #4a4a4a);
+            color: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+        .bank-card .bank-logo {
+            width: 60px;
+            height: auto;
+            margin-bottom: 15px;
+        }
+        .bank-card .card-number {
+            font-size: 1.4em;
+            letter-spacing: 4px;
+            margin: 15px 0;
+            font-family: monospace;
+        }
+        .bank-card .card-name {
+            text-transform: uppercase;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
     {% extends "base.html" %}
@@ -25,17 +51,45 @@
                     {% endif %}
                 {% endwith %}
 
-                <div class="alert alert-info">
+                <div class="alert alert-info mb-4">
                     <h4>Total Pembayaran: Rp. 500.000</h4>
-                    <p>Silakan transfer ke rekening berikut:</p>
-                    <ul>
-                        <li>Bank BCA: 1234567890</li>
-                        <li>Bank BNI: 0987654321</li>
-                        <li>Bank Mandiri: 1122334455</li>
-                    </ul>
+                    <p>Silakan transfer ke salah satu rekening berikut:</p>
                 </div>
-                
-                <form method="POST" action="{{ url_for('submit_payment') }}" enctype="multipart/form-data">
+
+                <div class="row">
+                    <!-- BCA Card -->
+                    <div class="col-md-4">
+                        <div class="bank-card">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/5/5c/Bank_Central_Asia.svg" class="bank-logo" alt="BCA">
+                            <div class="card-number">1234 5678 9012 3456</div>
+                            <div class="card-name">a.n. PPDB SMA NEGERI 1</div>
+                            <small>BANK BCA</small>
+                        </div>
+                    </div>
+
+                    <!-- Mandiri Card -->
+                    <div class="col-md-4">
+                        <div class="bank-card" style="background: linear-gradient(45deg, #004687, #0066b3);">
+                            <img src="https://upload.wikimedia.org/wikipedia/commons/a/ad/Bank_Mandiri_logo_2016.svg" class="bank-logo" alt="Mandiri">
+                            <div class="card-number">1234 5678 9012 3456</div>
+                            <div class="card-name">a.n. PPDB SMA NEGERI 1</div>
+                            <small>BANK MANDIRI</small>
+                        </div>
+                    </div>
+
+                    <!-- BNI Card -->
+                    <div class="col-md-4">
+                        <div class="bank-card" style="background: linear-gradient(45deg, #f07d00, #ffaa4c);">
+                            <img src="https://upload.wikimedia.org/wikipedia/id/5/55/BNI_logo.svg" class="bank-logo" alt="BNI">
+                            <div class="card-number">1234 5678 9012 3456</div>
+                            <div class="card-name">a.n. PPDB SMA NEGERI 1</div>
+                            <small>BANK BNI</small>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Upload Bukti Transfer -->
+                <form method="POST" action="{{ url_for('submit_payment') }}" enctype="multipart/form-data" class="mt-4">
                     <div class="form-group">
                         <label>Nama Bank Pengirim:</label>
                         <select name="bank_name" class="form-control" required>

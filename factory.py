@@ -172,8 +172,9 @@ def create_app():
         user = User.query.get(user_id)
         if user:
             user.status = "accepted"
+            user.is_verified = True  # Tambahkan ini untuk mengubah status verifikasi
             db.session.commit()
-            flash(f"User {user.username} telah diterima.")
+            flash(f"User {user.username} telah diterima dan diverifikasi.")
         return redirect(url_for('admin_dashboard'))
 
     @app.route('/admin/reject/<int:user_id>', methods=['POST'])
@@ -249,6 +250,49 @@ def create_app():
             db.session.commit()
             flash(f"Pembayaran untuk {user.username} telah diverifikasi", "success")
         return redirect(url_for('admin_detail', user_id=user.id))
+
+    @app.route('/admin/report')
+    def admin_report():
+        from models import User
+        
+        # Hitung statistik
+        total_pendaftar = User.query.filter(User.role != 'admin').count()
+        total_diterima = User.query.filter_by(status='accepted').count()
+        total_ditolak = User.query.filter_by(status='rejected').count()
+        total_pending = User.query.filter_by(status='pending').count()
+        
+        # Statistik per jurusan
+        jurusan_stats = []
+        for jurusan in ['IPA', 'IPS', 'Bahasa', 'Teknik']:
+            total = User.query.filter_by(jurusan=jurusan).count()
+            diterima = User.query.filter_by(jurusan=jurusan, status='accepted').count()
+            jurusan_stats.append({
+                'nama': jurusan,
+                'total': total,
+                'diterima': diterima
+            })
+            
+        # Daftar siswa diterima
+        siswa_diterima = User.query.filter_by(status='accepted').all()
+        
+        # Statistik pembayaran
+        total_sudah_bayar = User.query.filter_by(payment_status='paid').count()
+        total_belum_bayar = User.query.filter_by(status='accepted').filter(
+            (User.payment_status != 'paid') | (User.payment_status == None)
+        ).count()
+        total_pembayaran = total_sudah_bayar * 500000  # Rp 500.000 per siswa
+        
+        return render_template('admin_report.html',
+            total_pendaftar=total_pendaftar,
+            total_diterima=total_diterima,
+            total_ditolak=total_ditolak,
+            total_pending=total_pending,
+            jurusan_stats=jurusan_stats,
+            siswa_diterima=siswa_diterima,
+            total_sudah_bayar=total_sudah_bayar,
+            total_belum_bayar=total_belum_bayar,
+            total_pembayaran="{:,}".format(total_pembayaran)
+        )
 
     @app.errorhandler(404)
     def not_found(error):

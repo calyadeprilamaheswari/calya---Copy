@@ -52,6 +52,11 @@
         {% endwith %}
         
         <h3>Daftar User Terdaftar:</h3>
+        <div class="mb-3">
+          <a href="{{ url_for('admin_report') }}" class="btn btn-info">
+            <i class="fas fa-file-alt mr-2"></i>Lihat Laporan
+          </a>
+        </div>
         <ul class="list-group">
           {% for u in users %}
             <li class="list-group-item">

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Laporan PPDB - Admin Dashboard</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        .report-card {
+            border: none;
+            border-radius: 15px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .chart-container {
+            height: 300px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <div class="card report-card">
+            <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+                <h2><i class="fas fa-chart-bar mr-2"></i>Laporan PPDB 2024</h2>
+                <button onclick="window.print()" class="btn btn-light"><i class="fas fa-print mr-2"></i>Cetak Laporan</button>
+            </div>
+            <div class="card-body">
+                <!-- Statistik Umum -->
+                <div class="row mb-4">
+                    <div class="col-md-3">
+                        <div class="card bg-info text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_pendaftar }}</h3>
+                                <p class="mb-0">Total Pendaftar</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-success text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_diterima }}</h3>
+                                <p class="mb-0">Siswa Diterima</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-danger text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_ditolak }}</h3>
+                                <p class="mb-0">Siswa Ditolak</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="card bg-warning text-white">
+                            <div class="card-body text-center">
+                                <h3>{{ total_pending }}</h3>
+                                <p class="mb-0">Menunggu Verifikasi</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Statistik per Jurusan -->
+                <div class="card report-card">
+                    <div class="card-header">
+                        <h4><i class="fas fa-graduation-cap mr-2"></i>Statistik per Jurusan</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            {% for jurusan in jurusan_stats %}
+                            <div class="col-md-3">
+                                <div class="card">
+                                    <div class="card-body text-center">
+                                        <h5>{{ jurusan.nama }}</h5>
+                                        <p>Pendaftar: {{ jurusan.total }}</p>
+                                        <p>Diterima: {{ jurusan.diterima }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Daftar Siswa Diterima -->
+                <div class="card report-card mt-4">
+                    <div class="card-header">
+                        <h4><i class="fas fa-user-check mr-2"></i>Daftar Siswa Diterima</h4>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Lengkap</th>
+                                    <th>Jurusan</th>
+                                    <th>Status Pembayaran</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for siswa in siswa_diterima %}
+                                <tr>
+                                    <td>{{ loop.index }}</td>
+                                    <td>{{ siswa.full_name }}</td>
+                                    <td>{{ siswa.jurusan }}</td>
+                                    <td>
+                                        <span class="badge badge-{{ 'success' if siswa.payment_status == 'paid' else 'warning' }}">
+                                            {{ 'Sudah Bayar' if siswa.payment_status == 'paid' else 'Belum Bayar' }}
+                                        </span>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Status Pembayaran -->
+                <div class="card report-card mt-4">
+                    <div class="card-header">
+                        <h4><i class="fas fa-money-bill-wave mr-2"></i>Status Pembayaran</h4>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card bg-success text-white">
+                                    <div class="card-body text-center">
+                                        <h3>{{ total_sudah_bayar }}</h3>
+                                        <p>Sudah Bayar</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-warning text-white">
+                                    <div class="card-body text-center">
+                                        <h3>{{ total_belum_bayar }}</h3>
+                                        <p>Belum Bayar</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card bg-info text-white">
+                                    <div class="card-body text-center">
+                                        <h3>Rp {{ total_pembayaran }}</h3>
+                                        <p>Total Pembayaran</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
