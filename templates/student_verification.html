@@ -1,70 +1,221 @@
 <!DOCTYPE html>
 <html>
-  <head>
+<head>
     <title>Verifikasi Siswa</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-  </head>
-  <body>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 30px;
+        }
+
+        .form-card .card-header {
+            background: linear-gradient(135deg, #63b1f1, #5cb8f6);
+            color: white;
+            border-radius: 15px 15px 0 0;
+            padding: 1.5rem;
+        }
+
+        .form-section {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border-left: 4px solid #63b1f1;
+        }
+
+        .form-section h4 {
+            color: #506c94;
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+            padding: 10px 15px;
+        }
+
+        .form-control:focus {
+            border-color: #639cf1;
+            box-shadow: 0 0 0 0.2rem rgba(99, 144, 241, 0.25);
+        }
+
+        .custom-file-label {
+            border-radius: 8px;
+            padding: 10px 15px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #63a5f1, #5c9af6);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 25px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 177, 241, 0.3);
+        }
+
+        .icon-input {
+            position: relative;
+        }
+
+        .icon-input i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .icon-input input {
+            padding-left: 40px;
+        }
+    </style>
+</head>
+<body>
     <div class="container mt-5">
-      <div class="card">
-        <div class="card-header">
-          <h2>Verifikasi Siswa</h2>
+        <div class="form-card">
+            <div class="card-header">
+                <h2><i class="fas fa-user-graduate mr-2"></i>Verifikasi Data Siswa</h2>
+                <p class="mb-0">Silakan lengkapi data diri Anda dengan benar</p>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="/student_verification" enctype="multipart/form-data">
+                    <!-- Data Pribadi -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-user mr-2"></i>Data Pribadi</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="full_name" class="form-control" placeholder="Nama Lengkap" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-envelope"></i>
+                                    <input type="email" name="email" class="form-control" placeholder="Email" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <input type="text" name="tempat_lahir" class="form-control" placeholder="Tempat Lahir" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-calendar-alt"></i>
+                                    <input type="date" name="tanggal_lahir" class="form-control" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Nomor Telepon:</label>
+                            <input type="text" name="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Alamat:</label>
+                            <input type="text" name="address" class="form-control" required>
+                        </div>
+                    </div>
+
+                    <!-- Data Orang Tua -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-users mr-2"></i>Data Orang Tua</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="nama_ayah" class="form-control" placeholder="Nama Ayah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-user"></i>
+                                    <input type="text" name="nama_ibu" class="form-control" placeholder="Nama Ibu" required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Data Akademik -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-school mr-2"></i>Data Akademik</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-building"></i>
+                                    <input type="text" name="asal_sekolah" class="form-control" placeholder="Asal Sekolah" required>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select name="jurusan" class="form-control" required>
+                                        <option value="">-- Pilih Jurusan --</option>
+                                        <option value="IPA">IPA</option>
+                                        <option value="IPS">IPS</option>
+                                        <option value="Bahasa">Bahasa</option>
+                                        <option value="Teknik">Teknik</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upload Dokumen -->
+                    <div class="form-section">
+                        <h4><i class="fas fa-file-upload mr-2"></i>Upload Dokumen</h4>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Foto Ijazah:</label>
+                                    <div class="custom-file">
+                                        <input type="file" name="ijasah" class="custom-file-input" accept="image/*" required>
+                                        <label class="custom-file-label">Pilih file...</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Foto Diri:</label>
+                                    <div class="custom-file">
+                                        <input type="file" name="foto_diri" class="custom-file-input" accept="image/*" required>
+                                        <label class="custom-file-label">Pilih file...</label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-lg btn-block">
+                        <i class="fas fa-paper-plane mr-2"></i>Submit Pendaftaran
+                    </button>
+                </form>
+            </div>
         </div>
-        <div class="card-body">
-          <form method="POST" action="/student_verification" enctype="multipart/form-data">
-            <div class="form-group">
-              <label>Nama Lengkap:</label>
-              <input type="text" name="full_name" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Nama Ayah:</label>
-              <input type="text" name="nama_ayah" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Nama Ibu:</label>
-              <input type="text" name="nama_ibu" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Tanggal Lahir:</label>
-              <input type="date" name="tanggal_lahir" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Nomor Telepon:</label>
-              <input type="text" name="phone" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Alamat:</label>
-              <input type="text" name="address" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Asal Sekolah:</label>
-              <input type="text" name="asal_sekolah" class="form-control" required>
-            </div>
-            <div class="form-group">
-              <label>Jurusan:</label>
-              <select name="jurusan" class="form-control" required>
-                <option value="">-- Pilih Jurusan --</option>
-                <option value="IPA">IPA</option>
-                <option value="IPS">IPS</option>
-                <option value="Bahasa">Bahasa</option>
-                <option value="Teknik">Teknik</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>Foto Ijasah:</label>
-              <input type="file" name="ijasah" class="form-control-file" accept="image/*" required>
-            </div>
-            <div class="form-group">
-              <label>Foto Diri:</label>
-              <input type="file" name="foto_diri" class="form-control-file" accept="image/*" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-          </form>
-        </div>
-      </div>
     </div>
-  </body>
+
+    <script>
+        // Update file input labels
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
+        });
+    </script>
+</body>
 </html>

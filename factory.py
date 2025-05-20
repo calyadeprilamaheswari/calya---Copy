@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session  # Add session here
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
-from werkzeug.utils import secure_filename
 import os
+from werkzeug.utils import secure_filename
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -18,11 +18,6 @@ def create_app():
     login_manager.init_app(app)
     login_manager.login_view = 'auth.login'
     login_manager.login_message_category = 'info'
-
-    # Konfigurasi upload folder
-    app.config['UPLOAD_FOLDER'] = os.path.join('static', 'uploads')
-    if not os.path.exists(app.config['UPLOAD_FOLDER']):
-        os.makedirs(app.config['UPLOAD_FOLDER'])
 
     with app.app_context():
         from models import User
@@ -48,13 +43,13 @@ def create_app():
                 if user.role == "admin":
                     flash("Gunakan halaman admin login untuk admin")
                     return redirect(url_for("admin_login"))
-                session["user_id"] = user.id
+                session["user_id"] = user.id  # Now session is defined
                 
-                # Cek apakah user sudah pernah mengisi form pendaftaran
-                if not user.full_name:  # Jika belum mengisi form pendaftaran
-                    return redirect(url_for('student_verification'))  # Ke form pendaftaran
-                else:  # Jika sudah mengisi form pendaftaran
-                    return redirect(url_for('student_dashboard'))  # Ke halaman status
+                # Jika belum mengisi form pendaftaran
+                if not user.full_name:
+                    return redirect(url_for('student_verification'))
+                else:
+                    return redirect(url_for('student_dashboard'))
                     
             flash("Username atau password salah")
             return redirect(url_for("login"))
@@ -101,28 +96,6 @@ def create_app():
                 user = User.query.get(user_id)
                 if user:
                     try:
-                        # Pastikan folder uploads ada
-                        if not os.path.exists(app.config['UPLOAD_FOLDER']):
-                            os.makedirs(app.config['UPLOAD_FOLDER'])
-
-                        # Handle file ijasah
-                        if 'ijasah' in request.files:
-                            file = request.files['ijasah']
-                            if file and file.filename:
-                                filename = f"ijasah_{user.id}_{secure_filename(file.filename)}"
-                                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                                file.save(filepath)
-                                user.ijasah = filename
-
-                        # Handle file foto diri
-                        if 'foto_diri' in request.files:
-                            file = request.files['foto_diri']
-                            if file and file.filename:
-                                filename = f"foto_{user.id}_{secure_filename(file.filename)}"
-                                filepath = os.path.join(app.config['UPLOAD_FOLDER'], filename)
-                                file.save(filepath)
-                                user.foto_diri = filename
-
                         # Simpan data form ke database
                         user.full_name = request.form.get('full_name')
                         user.phone = request.form.get('phone')
@@ -130,13 +103,12 @@ def create_app():
                         user.jurusan = request.form.get('jurusan')
                         user.status = "pending"
                         db.session.commit()
-
                         flash("Pendaftaran berhasil! Silakan tunggu beberapa hari untuk verifikasi dari admin.", "success")
-                        return redirect(url_for('home'))  # Kembali ke home setelah daftar
+                        return redirect(url_for('home'))  # Redirect ke home setelah verifikasi
 
                     except Exception as e:
                         flash(f"Error: {str(e)}", "error")
-                        return redirect(url_for('student_verification'))
+                        return redirect(url_for('home'))
 
             flash("Anda harus login terlebih dahulu")
             return redirect(url_for('login'))
@@ -147,14 +119,11 @@ def create_app():
     @app.route('/student_dashboard')
     def student_dashboard():
         from models import User
+        from flask import session
         user_id = session.get("user_id")
         if user_id:
             user = User.query.get(user_id)
             if user:
-                # Jika sudah diterima, arahkan ke halaman pembayaran
-                if user.status == 'accepted' and not user.payment_proof:
-                    flash("Selamat! Anda diterima. Silakan lakukan pembayaran daftar ulang.", "success")
-                    return redirect(url_for('payment'))
                 return render_template("student_dashboard.html", user=user)
         flash("Anda harus login terlebih dahulu.")
         return redirect(url_for('login'))
@@ -162,9 +131,48 @@ def create_app():
     @app.route('/admin_dashboard')
     def admin_dashboard():
         from models import User
-        # Tampilkan data siswa (non-admin) saja sehingga hanya data verifikasi yang diisi muncul
         users = User.query.filter(User.role != 'admin').all()
-        return render_template("admin_dashboard.html", users=users)
+        return render_template("admin_dashboard.html", users=users, 
+                             total_pendaftar=len(users),
+                             total_diterima=len([u for u in users if u.status == 'accepted']),
+                             total_ditolak=len([u for u in users if u.status == 'rejected']),
+                             total_pending=len([u for u in users if u.status == 'pending']))
+
+    # Fix admin_report route
+    @app.route('/admin/report')
+    def admin_report():
+        from models import User
+        
+        # Get basic statistics
+        users = User.query.filter(User.role != 'admin').all()
+        siswa_diterima = User.query.filter_by(status='accepted').all()  # Add this line
+        total_sudah_bayar = User.query.filter_by(payment_status='paid').count()
+        total_belum_bayar = User.query.filter_by(status='accepted').filter(
+            (User.payment_status != 'paid') | (User.payment_status == None)
+        ).count()
+
+        # Get jurusan stats
+        jurusan_stats = []
+        for jurusan in ['IPA', 'IPS', 'Bahasa', 'Teknik']:
+            total = User.query.filter_by(jurusan=jurusan).count()
+            diterima = User.query.filter_by(jurusan=jurusan, status='accepted').count()
+            jurusan_stats.append({
+                'nama': jurusan,
+                'total': total,
+                'diterima': diterima
+            })
+
+        return render_template('admin_report.html',
+            total_pendaftar=len(users),
+            total_diterima=len([u for u in users if u.status == 'accepted']),
+            total_ditolak=len([u for u in users if u.status == 'rejected']),
+            total_pending=len([u for u in users if u.status == 'pending']),
+            siswa_diterima=siswa_diterima,  # Add this line
+            jurusan_stats=jurusan_stats,
+            total_sudah_bayar=total_sudah_bayar,
+            total_belum_bayar=total_belum_bayar,
+            total_pembayaran=total_sudah_bayar * 500000
+        )
 
     @app.route('/admin/accept/<int:user_id>', methods=['POST'])
     def admin_accept(user_id):
@@ -172,9 +180,10 @@ def create_app():
         user = User.query.get(user_id)
         if user:
             user.status = "accepted"
-            user.is_verified = True  # Tambahkan ini untuk mengubah status verifikasi
             db.session.commit()
-            flash(f"User {user.username} telah diterima dan diverifikasi.")
+            flash(f"User {user.username} telah diterima dan dapat melakukan pembayaran.")
+            # Send to payment page automatically
+            return redirect(url_for('payment', user_id=user.id))
         return redirect(url_for('admin_dashboard'))
 
     @app.route('/admin/reject/<int:user_id>', methods=['POST'])
@@ -195,20 +204,39 @@ def create_app():
             return render_template("admin_detail.html", user=user)
         return redirect(url_for('admin_dashboard'))
 
+    @app.route('/admin/delete/<int:user_id>', methods=['POST'])
+    def admin_delete(user_id):
+        from models import User
+        user = User.query.get(user_id)
+        if user and user.role != 'admin':  # Prevent admin deletion
+            try:
+                # Delete from database
+                db.session.delete(user)
+                db.session.commit()
+                flash(f"User {user.username} telah dihapus.", "success")
+            except Exception as e:
+                flash(f"Error menghapus user: {str(e)}", "error")
+                
+        return redirect(url_for('admin_dashboard'))
+
     @app.route('/logout')
     def logout():
-        session.clear()  # Hapus semua data session
+        session.clear()  # Clear all session data
         flash('Anda telah berhasil logout', 'success')
-        return redirect(url_for('home'))
+        return redirect(url_for('home'))  # Redirect to home page
+
+    @app.errorhandler(404)
+    def not_found(error):
+        return ("The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.", 404)
 
     @app.route('/payment', methods=['GET', 'POST'])
     def payment():
-        from models import User
-        if "user_id" not in session:
+        user_id = session.get("user_id")
+        if not user_id:
             flash("Anda harus login terlebih dahulu", "error")
             return redirect(url_for("login"))
             
-        user = User.query.get(session["user_id"])
+        user = User.query.get(user_id)
         if user and user.status == "accepted":
             return render_template("payment.html", user=user)
         else:
@@ -217,12 +245,12 @@ def create_app():
 
     @app.route('/submit_payment', methods=['POST'])
     def submit_payment():
-        from models import User
-        if "user_id" not in session:
+        user_id = session.get("user_id")
+        if not user_id:
             flash("Anda harus login terlebih dahulu", "error")
             return redirect(url_for("login"))
             
-        user = User.query.get(session["user_id"])
+        user = User.query.get(user_id)
         if user and user.status == "accepted":
             try:
                 file = request.files['payment_proof']
@@ -240,63 +268,6 @@ def create_app():
                 flash(f"Error: {str(e)}", "error")
                 
         return redirect(url_for("student_dashboard"))
-
-    @app.route('/admin/verify_payment/<int:user_id>', methods=['POST'])
-    def verify_payment(user_id):
-        from models import User
-        user = User.query.get(user_id)
-        if user:
-            user.payment_status = 'paid'
-            db.session.commit()
-            flash(f"Pembayaran untuk {user.username} telah diverifikasi", "success")
-        return redirect(url_for('admin_detail', user_id=user.id))
-
-    @app.route('/admin/report')
-    def admin_report():
-        from models import User
-        
-        # Hitung statistik
-        total_pendaftar = User.query.filter(User.role != 'admin').count()
-        total_diterima = User.query.filter_by(status='accepted').count()
-        total_ditolak = User.query.filter_by(status='rejected').count()
-        total_pending = User.query.filter_by(status='pending').count()
-        
-        # Statistik per jurusan
-        jurusan_stats = []
-        for jurusan in ['IPA', 'IPS', 'Bahasa', 'Teknik']:
-            total = User.query.filter_by(jurusan=jurusan).count()
-            diterima = User.query.filter_by(jurusan=jurusan, status='accepted').count()
-            jurusan_stats.append({
-                'nama': jurusan,
-                'total': total,
-                'diterima': diterima
-            })
-            
-        # Daftar siswa diterima
-        siswa_diterima = User.query.filter_by(status='accepted').all()
-        
-        # Statistik pembayaran
-        total_sudah_bayar = User.query.filter_by(payment_status='paid').count()
-        total_belum_bayar = User.query.filter_by(status='accepted').filter(
-            (User.payment_status != 'paid') | (User.payment_status == None)
-        ).count()
-        total_pembayaran = total_sudah_bayar * 500000  # Rp 500.000 per siswa
-        
-        return render_template('admin_report.html',
-            total_pendaftar=total_pendaftar,
-            total_diterima=total_diterima,
-            total_ditolak=total_ditolak,
-            total_pending=total_pending,
-            jurusan_stats=jurusan_stats,
-            siswa_diterima=siswa_diterima,
-            total_sudah_bayar=total_sudah_bayar,
-            total_belum_bayar=total_belum_bayar,
-            total_pembayaran="{:,}".format(total_pembayaran)
-        )
-
-    @app.errorhandler(404)
-    def not_found(error):
-        return ("The requested URL was not found on the server. If you entered the URL manually please check your spelling and try again.", 404)
 
     return app
 

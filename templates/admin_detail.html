@@ -13,15 +13,9 @@
       <div class="card-body">
         <h4>Data Pribadi:</h4>
         <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Role:</strong> {{ user.role }}</p>
-        <p><strong>Status:</strong> {{ user.status }}</p>
-        
-        <h4>Data Verifikasi:</h4>
         <p><strong>Nama Lengkap:</strong> {{ user.full_name }}</p>
-        <p><strong>Nama Ayah:</strong> {{ user.nama_ayah }}</p>
-        <p><strong>Nama Ibu:</strong> {{ user.nama_ibu }}</p>
         <p><strong>Tempat, Tanggal Lahir:</strong> 
-          {{ user.tempat_lahir }}{% if user.tanggal_lahir %}, {{ user.tanggal_lahir.strftime('%d-%m-%Y') }}{% endif %}
+            {{ user.tempat_lahir }}{% if user.tanggal_lahir %}, {{ user.tanggal_lahir.strftime('%d-%m-%Y') }}{% endif %}
         </p>
         <p><strong>Asal Sekolah:</strong> {{ user.asal_sekolah }}</p>
         <p><strong>Telepon:</strong> {{ user.phone }}</p>
@@ -30,7 +24,6 @@
 
         <h4 class="mt-4">Dokumen:</h4>
         <div class="row">
-          <!-- Ijazah -->
           <div class="col-md-6">
             <div class="card">
               <div class="card-header">
@@ -49,7 +42,6 @@
             </div>
           </div>
 
-          <!-- Foto Diri -->
           <div class="col-md-6">
             <div class="card">
               <div class="card-header">
