@@ -3,17 +3,17 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}PPDB Online 2024{% endblock %}</title>
+    <title>{% block title %}PPDB Online 2026{% endblock %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #74a3e9;
-            --secondary: #67abeb;
-            --success: #88f7b0;
-            --warning: #ece1b6;
-            --danger: #ff9494;
+            --primary: #a8c7ed;
+            --secondary: #bdd8f7;
+            --success: #c3e6d3;
+            --warning: #f7e9c3;
+            --danger: #f7c3c3;
             --background: #f8fafc;
         }
 
@@ -23,7 +23,7 @@
         }
 
         .navbar {
-            background: linear-gradient(135deg, var(--primary), var(--secondary)) !important;
+            background: linear-gradient(135deg, #72acf3, #79afec) !important;
             padding: 1rem 2rem;
             box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
         }
@@ -48,7 +48,7 @@
         }
 
         .hero-section {
-            background: linear-gradient(rgba(121, 197, 241, 0.9), rgba(115, 163, 235, 0.9)),
+            background: linear-gradient(rgba(126, 177, 240, 0.9), rgba(142, 187, 238, 0.9)),
                         url('https://source.unsplash.com/1600x900/?school,education');
             background-size: cover;
             color: white;
@@ -66,7 +66,7 @@
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #85bafa, #bdd8f7);
             border: none;
         }
 
@@ -94,7 +94,7 @@
             width: 4rem;
             height: 4rem;
             border-radius: 1rem;
-            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            background: linear-gradient(135deg, #93c0f7, #8fbdf3);
             color: white;
             display: flex;
             align-items: center;
@@ -157,12 +157,13 @@
 </head>
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="/">PPDB System</a>
+        <a class="navbar-brand" href="/">PPDB ONLINE</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
+                <li class="nav-item"><a class="nav-link" href="{{ url_for('informasi_sekolah') }}">Informasi Sekolah</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('login') }}">Login</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('register') }}">Register</a></li>
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('admin_login') }}">Admin Login</a></li>
@@ -173,8 +174,8 @@
         {% block content %}
         <div class="hero-section animate-fade-in">
             <div class="container">
-                <h1 class="display-4 mb-4">Selamat Datang di PPDB Online 2024</h1>
-                <p class="lead mb-5">Wujudkan Masa Depan Cerahmu Bersama Kami</p>
+                <h1 class="display-4 mb-4">Selamat Datang di PPDB Online 2026</h1>
+                <p class="lead mb-5">Wujudkan Masa Depan Cerahmu Bersama SMA 1 BANDUNG</p>
                 <div class="d-flex justify-content-center gap-3">
                     <a href="{{ url_for('register') }}" class="btn btn-light btn-lg">
                         <i class="fas fa-user-plus mr-2"></i>Daftar Sekarang

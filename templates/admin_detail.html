@@ -14,13 +14,16 @@
         <h4>Data Pribadi:</h4>
         <p><strong>Username:</strong> {{ user.username }}</p>
         <p><strong>Nama Lengkap:</strong> {{ user.full_name }}</p>
-        <p><strong>Tempat, Tanggal Lahir:</strong> 
-            {{ user.tempat_lahir }}{% if user.tanggal_lahir %}, {{ user.tanggal_lahir.strftime('%d-%m-%Y') }}{% endif %}
-        </p>
-        <p><strong>Asal Sekolah:</strong> {{ user.asal_sekolah }}</p>
+        <p><strong>Jenis Kelamin:</strong> {{ user.gender or '-' }}</p>
+        <p><strong>Tempat, Tanggal Lahir:</strong> {{ user.tempat_lahir or '-' }}</p>
+        <p><strong>Asal Sekolah:</strong> {{ user.asal_sekolah or '-' }}</p>
         <p><strong>Telepon:</strong> {{ user.phone }}</p>
         <p><strong>Alamat:</strong> {{ user.address }}</p>
         <p><strong>Jurusan:</strong> {{ user.jurusan }}</p>
+
+        <h4 class="mt-4">Data Orang Tua:</h4>
+        <p><strong>Nama Ayah:</strong> {{ user.nama_ayah or '-' }}</p>
+        <p><strong>Nama Ibu:</strong> {{ user.nama_ibu or '-' }}</p>
 
         <h4 class="mt-4">Dokumen:</h4>
         <div class="row">

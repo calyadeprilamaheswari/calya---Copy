@@ -5,20 +5,41 @@
   <div class="card shadow">
     <div class="card-header d-flex justify-content-between align-items-center">
       <h2>Student Dashboard</h2>
-      <a href="{{ url_for('home') }}" class="btn btn-danger">
+      <a href="{{ url_for('logout') }}" class="btn btn-danger">
         <i class="fas fa-sign-out-alt mr-2"></i>Logout
       </a>
     </div>
     <div class="card-body">
       <div class="alert alert-info">
         <h4><i class="fas fa-info-circle"></i> Status Pendaftaran</h4>
-        {% if user.status == 'pending' %}
-          <p>Pendaftaran anda sedang diproses. Tunggu beberapa hari lagi untuk mengecek status pendaftaran anda.</p>
-        {% elif user.status == 'accepted' %}
-          <p>Selamat! Anda telah diterima. Silakan melakukan pembayaran daftar ulang.</p>
-          <a href="{{ url_for('payment') }}" class="btn btn-success mt-2">
-            <i class="fas fa-money-bill-wave mr-2"></i>Lakukan Pembayaran Sekarang
+        {% if not user.full_name %}
+          <p>Anda belum melakukan pendaftaran. Silakan lengkapi data diri Anda.</p>
+          <a href="{{ url_for('student_verification') }}" class="btn btn-primary">
+            <i class="fas fa-user-edit mr-2"></i>Lengkapi Data Diri
           </a>
+        {% elif user.status == 'pending' %}
+          <p class="mb-0"><strong>Status:</strong> Menunggu Verifikasi</p>
+          <small class="text-muted">Pendaftaran Anda sedang diproses. Mohon tunggu verifikasi dari admin.</small>
+        {% elif user.status == 'accepted' %}
+          {% if user.payment_status == 'pending' %}
+            <div class="alert alert-info">
+              <h5><i class="fas fa-clock mr-2"></i>Pembayaran Sedang Diverifikasi</h5>
+              <p class="mb-0">Pembayaran berhasil, tunggu verifikasi dari admin.</p>
+            </div>
+          {% elif user.payment_status == 'paid' %}
+            <div class="alert alert-success">
+              <h5><i class="fas fa-check-circle mr-2"></i>Pembayaran Berhasil</h5>
+              <p class="mb-0">Selamat! Pembayaran Anda telah dikonfirmasi. Anda resmi menjadi siswa SMA 1 BANDUNG.</p>
+            </div>
+          {% else %}
+            <div class="alert alert-warning">
+              <h5><i class="fas fa-exclamation-circle mr-2"></i>Pembayaran Diperlukan</h5>
+              <p>Selamat! Anda telah diterima. Silakan melakukan pembayaran daftar ulang.</p>
+              <a href="{{ url_for('payment') }}" class="btn btn-success mt-2">
+                <i class="fas fa-money-bill-wave mr-2"></i>Lakukan Pembayaran
+              </a>
+            </div>
+          {% endif %}
         {% elif user.status == 'rejected' %}
           <p>Mohon maaf, pendaftaran anda belum dapat kami terima.</p>
         {% endif %}

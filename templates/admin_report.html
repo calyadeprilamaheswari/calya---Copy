@@ -109,11 +109,6 @@
                                 </div>
                             </div>
                         </div>
-                        
-                        <!-- Grafik Pendaftaran per Hari -->
-                        <div class="chart-container">
-                            <canvas id="registrationChart"></canvas>
-                        </div>
                     </div>
                 </div>
 
@@ -211,35 +206,5 @@
             </div>
         </div>
     </div>
-
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script>
-        // Grafik pendaftaran
-        const ctx = document.getElementById('registrationChart').getContext('2d');
-        new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: ['1 Jun', '5 Jun', '10 Jun', '15 Jun', '20 Jun', '25 Jun', '30 Jun'],
-                datasets: [{
-                    label: 'Jumlah Pendaftar',
-                    data: [0, 15, 30, 45, 60, 75, {{ total_pendaftar }}],
-                    borderColor: '#90caf9',
-                    tension: 0.3
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: {
-                        position: 'top',
-                    },
-                    title: {
-                        display: true,
-                        text: 'Trend Pendaftaran'
-                    }
-                }
-            }
-        });
-    </script>
 </body>
 </html>

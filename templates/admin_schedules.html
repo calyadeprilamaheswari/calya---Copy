@@ -1,0 +1,165 @@
+{% extends "base.html" %}
+{% block title %}Kelola Jadwal - Admin{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <h2>Kelola Jadwal Pelajaran</h2>
+            <button class="btn btn-primary" data-toggle="modal" data-target="#addScheduleModal">
+                <i class="fas fa-plus mr-2"></i>Tambah Jadwal
+            </button>
+        </div>
+        <div class="card-body">
+            {% for jurusan in ['IPA', 'IPS'] %}
+            <h4 class="mt-4">Jadwal {{ jurusan }}</h4>
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Waktu</th>
+                            <th>Senin</th>
+                            <th>Selasa</th>
+                            <th>Rabu</th>
+                            <th>Kamis</th>
+                            <th>Jumat</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for schedule in schedules if schedule.jurusan == jurusan %}
+                        <tr>
+                            <td>{{ schedule.waktu }}</td>
+                            <td>{{ schedule.senin }}</td>
+                            <td>{{ schedule.selasa }}</td>
+                            <td>{{ schedule.rabu }}</td>
+                            <td>{{ schedule.kamis }}</td>
+                            <td>{{ schedule.jumat }}</td>
+                            <td>
+                                <button class="btn btn-info btn-sm" onclick="openEditModal('{{ schedule.id }}', '{{ schedule.waktu }}', '{{ schedule.senin }}', '{{ schedule.selasa }}', '{{ schedule.rabu }}', '{{ schedule.kamis }}', '{{ schedule.jumat }}')">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <form action="{{ url_for('delete_schedule', id=schedule.id) }}" method="POST" style="display:inline;">
+                                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Modal Tambah Jadwal -->
+<div class="modal fade" id="addScheduleModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Jadwal Baru</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('add_schedule') }}" method="POST">
+                    <div class="form-group">
+                        <label>Jurusan:</label>
+                        <select name="jurusan" class="form-control" required>
+                            <option value="">-- Pilih Jurusan --</option>
+                            <option value="IPA">IPA</option>
+                            <option value="IPS">IPS</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Waktu:</label>
+                        <input type="text" name="waktu" class="form-control" placeholder="07:00 - 08:30" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senin:</label>
+                        <input type="text" name="senin" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Selasa:</label>
+                        <input type="text" name="selasa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rabu:</label>
+                        <input type="text" name="rabu" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kamis:</label>
+                        <input type="text" name="kamis" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumat:</label>
+                        <input type="text" name="jumat" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan Jadwal</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Edit Jadwal -->
+<div class="modal fade" id="editScheduleModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Jadwal</h5>
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="editScheduleForm" method="POST">
+                    <div class="form-group">
+                        <label>Waktu:</label>
+                        <input type="text" name="waktu" id="edit_waktu" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Senin:</label>
+                        <input type="text" name="senin" id="edit_senin" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Selasa:</label>
+                        <input type="text" name="selasa" id="edit_selasa" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rabu:</label>
+                        <input type="text" name="rabu" id="edit_rabu" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Kamis:</label>
+                        <input type="text" name="kamis" id="edit_kamis" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Jumat:</label>
+                        <input type="text" name="jumat" id="edit_jumat" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Simpan Perubahan</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function openEditModal(id, waktu, senin, selasa, rabu, kamis, jumat) {
+    $('#editScheduleForm').attr('action', '/admin/schedule/edit/' + id);
+    $('#edit_waktu').val(waktu);
+    $('#edit_senin').val(senin);
+    $('#edit_selasa').val(selasa);
+    $('#edit_rabu').val(rabu);
+    $('#edit_kamis').val(kamis);
+    $('#edit_jumat').val(jumat);
+    $('#editScheduleModal').modal('show');
+}
+
+$(document).ready(function() {
+    $('.modal').on('shown.bs.modal', function() {
+        $(this).find('[autofocus]').focus();
+    });
+});
+</script>
+{% endblock %}
