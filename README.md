@@ -188,6 +188,9 @@ Form pengisian data pribadi calon siswa.
 <img src="static/sss/tulisan jika siswa diterima.png" alt="Acceptance Notice" width="800"/>
 Notifikasi penerimaan siswa.
 
+<img src="static/sss/jika ditolak.png" alt="Rejection Notice" width="800"/>
+Notifikasi yang muncul ketika pendaftaran siswa ditolak oleh admin setelah proses verifikasi.
+
 ### Pembayaran
 <img src="static/sss/jika diterima muncul halaman pembayaran.png" alt="Payment Page" width="800"/>
 Halaman pembayaran setelah siswa diterima.
@@ -238,3 +241,6 @@ Form edit jadwal pelajaran.
 
 <img src="static/sss/jadwal.png" alt="Schedule View" width="800"/>
 Tampilan jadwal pelajaran.
+
+<img src="static/sss/selesai.png" alt="Completion Page" width="800"/>
+Halaman konfirmasi yang menunjukkan bahwa seluruh proses pendaftaran telah selesai dan berhasil dilakukan.
