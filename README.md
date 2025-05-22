@@ -159,4 +159,4 @@ MIT License
 ## Screenshots
 
 ### Homepage
-![Homepage](static/images/static/Screenshot (5).png)
+![Homepage](static/uploads/Screenshot (5).png)
