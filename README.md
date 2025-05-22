@@ -159,19 +159,19 @@ MIT License
 ## Screenshots
 
 ### Homepage
-<img src="./.github/screenshots/homepage.png" alt="Homepage" width="800"/>
+<img src="screenshots/homepage.png" alt="Homepage" width="800"/>
 
-### Pendaftaran Siswa
-<img src="./.github/screenshots/registration.png" alt="Registration Form" width="800"/>
+### Pendaftaran Siswa  
+<img src="screenshots/registration.png" alt="Registration Form" width="800"/>
 
 ### Dashboard Admin
-<img src="./.github/screenshots/admin_dashboard.png" alt="Admin Dashboard" width="800"/>
+<img src="screenshots/admin_dashboard.png" alt="Admin Dashboard" width="800"/>
 
 ### Verifikasi Pembayaran
-<img src="./.github/screenshots/payment.png" alt="Payment Verification" width="800"/>
+<img src="screenshots/payment.png" alt="Payment Verification" width="800"/>
 
 ### Detail Siswa
-<img src="./.github/screenshots/student_detail.png" alt="Student Detail" width="800"/>
+<img src="screenshots/student_detail.png" alt="Student Detail" width="800"/>
 
 ### Jadwal Pelajaran
-<img src="./.github/screenshots/schedule.png" alt="Class Schedule" width="800"/>
+<img src="screenshots/schedule.png" alt="Class Schedule" width="800"/>
