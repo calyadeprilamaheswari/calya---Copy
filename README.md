@@ -158,20 +158,83 @@ MIT License
 
 ## Screenshots
 
-### Homepage
-<img src="screenshots/homepage.png" alt="Homepage" width="800"/>
+### Home Page & Informasi Awal
+<img src="static/sss/home page.png" alt="Homepage" width="800"/>
+Halaman utama website PPDB yang menampilkan menu navigasi dan informasi pendaftaran.
 
-### Pendaftaran Siswa  
-<img src="screenshots/registration.png" alt="Registration Form" width="800"/>
+<img src="static/sss/langkah pendaftaran.png" alt="Registration Steps" width="800"/>
+Panduan langkah-langkah proses pendaftaran PPDB secara detail.
 
-### Dashboard Admin
-<img src="screenshots/admin_dashboard.png" alt="Admin Dashboard" width="800"/>
+<img src="static/sss/kualitas.png" alt="School Quality" width="800"/>
+Informasi tentang kualitas dan prestasi sekolah.
 
-### Verifikasi Pembayaran
-<img src="screenshots/payment.png" alt="Payment Verification" width="800"/>
+### Registrasi & Login
+<img src="static/sss/register.png" alt="Registration Form" width="800"/>
+Form registrasi akun baru untuk calon siswa.
 
-### Detail Siswa
-<img src="screenshots/student_detail.png" alt="Student Detail" width="800"/>
+<img src="static/sss/login.png" alt="Login Page" width="800"/>
+Halaman login untuk siswa.
 
-### Jadwal Pelajaran
-<img src="screenshots/schedule.png" alt="Class Schedule" width="800"/>
+<img src="static/sss/login admin.png" alt="Admin Login" width="800"/>
+Halaman login khusus admin.
+
+### Proses Pendaftaran
+<img src="static/sss/setelah daftar.png" alt="Post Registration" width="800"/>
+Tampilan setelah siswa berhasil mendaftar.
+
+<img src="static/sss/verifikasi siswa data pribadi.png" alt="Personal Data Verification" width="800"/>
+Form pengisian data pribadi calon siswa.
+
+<img src="static/sss/tulisan jika siswa diterima.png" alt="Acceptance Notice" width="800"/>
+Notifikasi penerimaan siswa.
+
+### Pembayaran
+<img src="static/sss/jika diterima muncul halaman pembayaran.png" alt="Payment Page" width="800"/>
+Halaman pembayaran setelah siswa diterima.
+
+<img src="static/sss/pengisian pembayaran.png" alt="Payment Form" width="800"/>
+Form pengisian data pembayaran.
+
+<img src="static/sss/pembayaran.png" alt="Payment Details" width="800"/>
+Detail informasi pembayaran.
+
+<img src="static/sss/submit pembayaran.png" alt="Payment Submission" width="800"/>
+Konfirmasi pengiriman bukti pembayaran.
+
+<img src="static/sss/status pembayaran.png" alt="Payment Status" width="800"/>
+Status verifikasi pembayaran.
+
+### Panel Admin
+<img src="static/sss/dashboard admin.png" alt="Admin Dashboard" width="800"/>
+Dashboard utama admin.
+
+<img src="static/sss/tampilan data di admin.png" alt="Admin Data View 1" width="800"/>
+Tampilan data pendaftar di panel admin.
+
+<img src="static/sss/tampilan data diadmin 2.png" alt="Admin Data View 2" width="800"/>
+Detail data pendaftar yang dapat dikelola admin.
+
+<img src="static/sss/tampilan data di admin 3.png" alt="Admin Data View 3" width="800"/>
+Manajemen status pendaftaran siswa.
+
+<img src="static/sss/bukti pembayaran muncul di admin.png" alt="Payment Verification Admin" width="800"/>
+Panel verifikasi bukti pembayaran oleh admin.
+
+<img src="static/sss/pembayaran masuk ke laporan.png" alt="Payment Reports" width="800"/>
+Laporan pembayaran yang telah masuk.
+
+<img src="static/sss/laporan.png" alt="Reports" width="800"/>
+Halaman laporan keseluruhan sistem.
+
+### Manajemen Jadwal
+<img src="static/sss/kelola jadwal pelajaran.png" alt="Schedule Management" width="800"/>
+Halaman pengelolaan jadwal pelajaran.
+
+<img src="static/sss/menambah jadwal baru.png" alt="Add New Schedule" width="800"/>
+Form penambahan jadwal baru.
+
+<img src="static/sss/edit jadwal.png" alt="Edit Schedule" width="800"/>
+Form edit jadwal pelajaran.
+
+<img src="static/sss/jadwal.png" alt="Schedule View" width="800"/>
+Tampilan jadwal pelajaran.
