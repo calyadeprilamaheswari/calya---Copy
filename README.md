@@ -159,25 +159,19 @@ MIT License
 ## Screenshots
 
 ### Homepage
-![Homepage](static/images/homepage.png)
-Halaman utama sistem PPDB yang menampilkan menu login, register, dan informasi sekolah. Dilengkapi dengan hero section dan fitur-fitur unggulan sekolah.
+<img src="./.github/screenshots/homepage.png" alt="Homepage" width="800"/>
 
 ### Pendaftaran Siswa
-![Registration Form](static/images/registration.png)
-Form pendaftaran siswa dengan berbagai field yang harus diisi seperti data pribadi, data orang tua, pilihan jurusan, dan upload dokumen.
+<img src="./.github/screenshots/registration.png" alt="Registration Form" width="800"/>
 
 ### Dashboard Admin
-![Admin Dashboard](static/images/admin_dashboard.png)
-Panel admin yang menampilkan statistik pendaftaran, daftar siswa pendaftar, dan tools untuk manajemen data.
+<img src="./.github/screenshots/admin_dashboard.png" alt="Admin Dashboard" width="800"/>
 
 ### Verifikasi Pembayaran
-![Payment Verification](static/images/payment.png)
-Halaman pembayaran dengan informasi rekening sekolah dan form upload bukti pembayaran.
+<img src="./.github/screenshots/payment.png" alt="Payment Verification" width="800"/>
 
 ### Detail Siswa
-![Student Detail](static/images/student_detail.png)
-Halaman detail siswa yang menampilkan informasi lengkap pendaftar beserta dokumen-dokumen yang diupload.
+<img src="./.github/screenshots/student_detail.png" alt="Student Detail" width="800"/>
 
 ### Jadwal Pelajaran
-![Class Schedule](static/images/schedule.png)
-Manajemen jadwal pelajaran untuk jurusan IPA dan IPS dengan fitur tambah, edit, dan hapus jadwal.
+<img src="./.github/screenshots/schedule.png" alt="Class Schedule" width="800"/>
