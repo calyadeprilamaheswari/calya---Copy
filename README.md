@@ -156,10 +156,7 @@ python app.py
 ## Lisensi
 MIT License
 
-## Kontak
-Email: admin@example.com
-
 ## Screenshots
 
 ### Homepage
-![Homepage](static/images/homepage.png)
+![Homepage](static/images/static/Screenshot (5).png)
