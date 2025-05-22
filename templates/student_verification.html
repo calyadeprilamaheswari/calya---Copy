@@ -108,18 +108,6 @@
 </head>
 <body>
     <div class="container mt-5">
-        <!-- Add Progress Bar -->
-        <div class="progress-wrapper mb-4">
-            <div class="progress-info d-flex justify-content-between mb-2">
-                <span>Progress Pendaftaran</span>
-                <span id="progressPercent">0%</span>
-            </div>
-            <div class="progress" style="height: 10px;">
-                <div class="progress-bar progress-bar-striped progress-bar-animated bg-primary" 
-                     role="progressbar" style="width: 0%" id="progressBar"></div>
-            </div>
-        </div>
-
         <div class="form-card">
             <div class="card-header">
                 <h2><i class="fas fa-user-graduate mr-2"></i>Verifikasi Data Siswa</h2>
@@ -160,6 +148,19 @@
                                     </select>
                                 </div>
                             </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <select name="agama" class="form-control" required>
+                                        <option value="">-- Pilih Agama --</option>
+                                        <option value="Islam">Islam</option>
+                                        <option value="Kristen">Kristen</option>
+                                        <option value="Katolik">Katolik</option>
+                                        <option value="Hindu">Hindu</option>
+                                        <option value="Buddha">Buddha</option>
+                                        <option value="Konghucu">Konghucu</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                         <div class="form-group">
                             <label>Nomor Telepon:</label>
@@ -180,11 +181,19 @@
                                     <i class="fas fa-user"></i>
                                     <input type="text" name="nama_ayah" class="form-control" placeholder="Nama Ayah" required>
                                 </div>
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-briefcase"></i>
+                                    <input type="text" name="pekerjaan_ayah" class="form-control" placeholder="Pekerjaan Ayah" required>
+                                </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group icon-input">
                                     <i class="fas fa-user"></i>
                                     <input type="text" name="nama_ibu" class="form-control" placeholder="Nama Ibu" required>
+                                </div>
+                                <div class="form-group icon-input">
+                                    <i class="fas fa-briefcase"></i>
+                                    <input type="text" name="pekerjaan_ibu" class="form-control" placeholder="Pekerjaan Ibu" required>
                                 </div>
                             </div>
                         </div>
@@ -246,84 +255,10 @@
     </div>
 
     <script>
-        // Update file input labels and progress tracking
-        $(document).ready(function() {
-            const totalFields = {
-                'Data Pribadi': 6,      // Nama, Email, Tempat Lahir, Gender, Telepon, Alamat
-                'Data Orang Tua': 2,    // Nama Ayah, Nama Ibu
-                'Data Akademik': 2,     // Asal Sekolah, Jurusan
-                'Upload Dokumen': 2      // Ijazah, Foto Diri
-            };
-            
-            function updateSectionProgress() {
-                let totalProgress = 0;
-                
-                // Check each section
-                for (let section in totalFields) {
-                    let filledFields = 0;
-                    let totalSectionFields = totalFields[section];
-                    
-                    if (section === 'Data Pribadi') {
-                        filledFields += $('#full_name').val() ? 1 : 0;
-                        filledFields += $('#email').val() ? 1 : 0;
-                        filledFields += $('#tempat_lahir').val() ? 1 : 0;
-                        filledFields += $('select[name="gender"]').val() ? 1 : 0;
-                        filledFields += $('input[name="phone"]').val() ? 1 : 0;
-                        filledFields += $('input[name="address"]').val() ? 1 : 0;
-                    } else if (section === 'Data Orang Tua') {
-                        filledFields += $('input[name="nama_ayah"]').val() ? 1 : 0;
-                        filledFields += $('input[name="nama_ibu"]').val() ? 1 : 0;
-                    } else if (section === 'Data Akademik') {
-                        filledFields += $('input[name="asal_sekolah"]').val() ? 1 : 0;
-                        filledFields += $('select[name="jurusan"]').val() ? 1 : 0;
-                    } else if (section === 'Upload Dokumen') {
-                        filledFields += $('input[name="ijasah"]')[0].files.length > 0 ? 1 : 0;
-                        filledFields += $('input[name="foto_diri"]')[0].files.length > 0 ? 1 : 0;
-                    }
-
-                    // Update section progress
-                    const sectionProgress = Math.round((filledFields / totalSectionFields) * 100);
-                    $(`.progress-${section.toLowerCase().replace(' ', '-')} .progress-bar`).css('width', sectionProgress + '%');
-                    $(`.progress-${section.toLowerCase().replace(' ', '-')} .progress-text`).text(sectionProgress + '%');
-                    
-                    totalProgress += filledFields;
-                }
-
-                // Update total progress
-                const totalFields = Object.values(totalFields).reduce((a, b) => a + b, 0);
-                const overallProgress = Math.round((totalProgress / totalFields) * 100);
-                $('#progressBar').css('width', overallProgress + '%');
-                $('#progressPercent').text(overallProgress + '%');
-            }
-
-            // Add section progress bars after each section header
-            $('.form-section').each(function() {
-                const sectionTitle = $(this).find('h4').text().trim();
-                const sectionClass = sectionTitle.toLowerCase().replace(' ', '-');
-                
-                $(this).find('h4').after(`
-                    <div class="progress-wrapper mb-3 progress-${sectionClass}">
-                        <div class="d-flex justify-content-between mb-1">
-                            <small>Progress ${sectionTitle}</small>
-                            <small class="progress-text">0%</small>
-                        </div>
-                        <div class="progress" style="height: 5px;">
-                            <div class="progress-bar bg-info" role="progressbar" style="width: 0%"></div>
-                        </div>
-                    </div>
-                `);
-            });
-
-            // Add event listeners for all inputs
-            $('input, select').on('change keyup', updateSectionProgress);
-            $('.custom-file-input').on('change', function() {
-                let fileName = $(this).val().split('\\').pop();
-                $(this).next('.custom-file-label').html(fileName);
-                updateSectionProgress();
-            });
-
-            // Initial progress calculation
-            updateSectionProgress();
+        // Keep only file input handler
+        $('.custom-file-input').on('change', function() {
+            let fileName = $(this).val().split('\\').pop();
+            $(this).next('.custom-file-label').html(fileName);
         });
     </script>
 </body>

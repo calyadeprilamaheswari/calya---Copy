@@ -9,17 +9,17 @@ class User(UserMixin, db.Model):
     password = db.Column(db.String(120), nullable=False)
     role = db.Column(db.String(20), nullable=False, default='user')
     status = db.Column(db.String(20), nullable=False, default='pending')
-    # Tambah kolom untuk data verifikasi
+
     full_name = db.Column(db.String(100))
     phone = db.Column(db.String(20))
     address = db.Column(db.String(200))
     jurusan = db.Column(db.String(50))
-    # Tambah kolom untuk pembayaran
+
     payment_status = db.Column(db.String(20), default='unpaid')  # unpaid/pending/paid
     payment_proof = db.Column(db.String(200))
     bank_name = db.Column(db.String(50))
     sender_name = db.Column(db.String(100))
-    # Kolom lainnya
+
     bukti_pembayaran = db.Column(db.String(200))
     ijasah = db.Column(db.String(200))
     foto_diri = db.Column(db.String(200))
@@ -27,8 +27,11 @@ class User(UserMixin, db.Model):
     asal_sekolah = db.Column(db.String(200))
     # Tambah kolom untuk data orang tua
     nama_ayah = db.Column(db.String(100))
+    pekerjaan_ayah = db.Column(db.String(100))  
     nama_ibu = db.Column(db.String(100))
-    gender = db.Column(db.String(20))  # Add this line after role
+    pekerjaan_ibu = db.Column(db.String(100)) 
+    gender = db.Column(db.String(20))
+    agama = db.Column(db.String(20))  
 
     @property
     def is_profile_complete(self):

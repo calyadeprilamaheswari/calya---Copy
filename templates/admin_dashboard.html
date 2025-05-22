@@ -113,24 +113,18 @@
                   Status: <span class="badge badge-{{ 'success' if u.status == 'accepted' else 'warning' }}">{{ u.status }}</span>
                 </div>
                 <div class="col-md-3">
-                  Verifikasi: <span class="badge badge-{{ 'success' if u.is_verified else 'danger' }}">
-                    {{ 'Sudah' if u.is_verified else 'Belum' }}
+                  Verifikasi: <span class="badge badge-{{ 'success' if u.status == 'accepted' else 'danger' }}">
+                    {{ 'Sudah' if u.status == 'accepted' else 'Belum' }}
                   </span>
                 </div>
                 <div class="col-md-2">
-                  <a href="/admin/detail/{{ u.id }}" class="btn btn-sm btn-info">Detail</a>
-                  {% if u.status == 'pending' and u.is_verified %}
-                    <form action="/admin/accept/{{ u.id }}" method="POST" style="display:inline;">
-                      <button type="submit" class="btn btn-sm btn-success">Terima</button>
-                    </form>
-                    <form action="/admin/reject/{{ u.id }}" method="POST" style="display:inline;">
-                      <button type="submit" class="btn btn-sm btn-danger">Tolak</button>
-                    </form>
-                  {% endif %}
+                  <a href="/admin/detail/{{ u.id }}" class="btn btn-sm btn-info">
+                    <i class="fas fa-eye mr-1"></i>Detail
+                  </a>
                   <form action="{{ url_for('admin_delete', user_id=u.id) }}" method="POST" style="display:inline;"
                         onsubmit="return confirm('Apakah Anda yakin ingin menghapus siswa ini?');">
                     <button type="submit" class="btn btn-sm btn-danger">
-                      <i class="fas fa-trash"></i> Hapus
+                      <i class="fas fa-trash"></i>
                     </button>
                   </form>
                 </div>

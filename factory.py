@@ -74,7 +74,6 @@ def create_app():
             return redirect(url_for("login"))
         return render_template("register.html")
 
-    # Tambahkan route admin_login untuk admin
     @app.route('/admin_login', methods=['GET', 'POST'])
     def admin_login():
         from models import User
@@ -98,19 +97,20 @@ def create_app():
             if user_id:
                 user = User.query.get(user_id)
                 if user:
-                    # Simpan data form ke database
                     user.full_name = request.form.get('full_name')
-                    user.gender = request.form.get('gender')  # Add this line
+                    user.gender = request.form.get('gender')
+                    user.agama = request.form.get('agama') 
                     user.phone = request.form.get('phone')
                     user.address = request.form.get('address')
                     user.jurusan = request.form.get('jurusan')
-                    user.tempat_lahir = request.form.get('tempat_lahir')  # Tambah ini
-                    user.asal_sekolah = request.form.get('asal_sekolah')  # Tambah ini
-                    user.nama_ayah = request.form.get('nama_ayah')  # Tambah ini
-                    user.nama_ibu = request.form.get('nama_ibu')    # Tambah ini
+                    user.tempat_lahir = request.form.get('tempat_lahir') 
+                    user.asal_sekolah = request.form.get('asal_sekolah') 
+                    user.nama_ayah = request.form.get('nama_ayah')
+                    user.pekerjaan_ayah = request.form.get('pekerjaan_ayah') 
+                    user.nama_ibu = request.form.get('nama_ibu')
+                    user.pekerjaan_ibu = request.form.get('pekerjaan_ibu')   
                     user.status = "pending"
 
-                    # Handle file uploads if present
                     if 'ijasah' in request.files:
                         file = request.files['ijasah']
                         if file and file.filename:
@@ -132,8 +132,7 @@ def create_app():
                 flash("Anda harus login terlebih dahulu untuk mengajukan verifikasi.")
                 return redirect(url_for('login'))
         return render_template("student_verification.html")
-        
-    # Tambahkan route student_dashboard untuk siswa
+
     @app.route('/student_dashboard')
     def student_dashboard():
         from models import User
@@ -148,7 +147,6 @@ def create_app():
     @app.route('/admin_dashboard')
     def admin_dashboard():
         from models import User
-        # Tampilkan data siswa (non-admin) saja sehingga hanya data verifikasi yang diisi muncul
         users = User.query.filter(User.role != 'admin').all()
         return render_template("admin_dashboard.html", users=users)
 

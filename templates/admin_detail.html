@@ -3,107 +3,221 @@
 <head>
   <title>Detail User</title>
   <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+  <style>
+    .info-section {
+      background: white;
+      border-radius: 15px;
+      padding: 25px;
+      margin-bottom: 25px;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.05);
+      border-left: 4px solid #4e73df;
+    }
+    
+    .info-section.success { border-left-color: #1cc88a; }
+    .info-section.warning { border-left-color: #f6c23e; }
+    .info-section.danger { border-left-color: #e74a3b; }
+    
+    .info-item {
+      padding: 10px 0;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .info-item:last-child {
+      border-bottom: none;
+    }
+    
+    .info-label {
+      color: #4e73df;
+      font-weight: 600;
+      margin-bottom: 5px;
+    }
+    
+    .doc-preview {
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    }
+    
+    .status-badge {
+      padding: 8px 15px;
+      border-radius: 20px;
+      font-weight: 500;
+    }
+  </style>
 </head>
 <body>
   <div class="container mt-5">
-    <div class="card shadow">
-      <div class="card-header">
-        <h2>Detail User: {{ user.username }}</h2>
+    <div class="row">
+      <!-- Data Pribadi Section -->
+      <div class="col-md-8">
+        <div class="info-section">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h4><i class="fas fa-user-circle mr-2"></i>Data Pribadi</h4>
+            <span class="status-badge badge badge-{{ 'success' if user.status == 'accepted' else 'warning' if user.status == 'pending' else 'danger' }}">
+              {{ user.status|upper }}
+            </span>
+          </div>
+          
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Nama Lengkap</div>
+                <div>{{ user.full_name or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Jenis Kelamin</div>
+                <div>{{ user.gender or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Agama</div>
+                <div>{{ user.agama or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Tempat Lahir</div>
+                <div>{{ user.tempat_lahir or '-' }}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Email/Username</div>
+                <div>{{ user.username }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Telepon</div>
+                <div>{{ user.phone or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Alamat</div>
+                <div>{{ user.address or '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Akademik -->
+        <div class="info-section success">
+          <h4 class="mb-4"><i class="fas fa-graduation-cap mr-2"></i>Data Akademik</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Asal Sekolah</div>
+                <div>{{ user.asal_sekolah or '-' }}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Jurusan</div>
+                <div>{{ user.jurusan or '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Data Orang Tua -->
+        <div class="info-section warning">
+          <h4 class="mb-4"><i class="fas fa-users mr-2"></i>Data Orang Tua</h4>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Nama Ayah</div>
+                <div>{{ user.nama_ayah or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Pekerjaan Ayah</div>
+                <div>{{ user.pekerjaan_ayah or '-' }}</div>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="info-item">
+                <div class="info-label">Nama Ibu</div>
+                <div>{{ user.nama_ibu or '-' }}</div>
+              </div>
+              <div class="info-item">
+                <div class="info-label">Pekerjaan Ibu</div>
+                <div>{{ user.pekerjaan_ibu or '-' }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <h4>Data Pribadi:</h4>
-        <p><strong>Username:</strong> {{ user.username }}</p>
-        <p><strong>Nama Lengkap:</strong> {{ user.full_name }}</p>
-        <p><strong>Jenis Kelamin:</strong> {{ user.gender or '-' }}</p>
-        <p><strong>Tempat, Tanggal Lahir:</strong> {{ user.tempat_lahir or '-' }}</p>
-        <p><strong>Asal Sekolah:</strong> {{ user.asal_sekolah or '-' }}</p>
-        <p><strong>Telepon:</strong> {{ user.phone }}</p>
-        <p><strong>Alamat:</strong> {{ user.address }}</p>
-        <p><strong>Jurusan:</strong> {{ user.jurusan }}</p>
 
-        <h4 class="mt-4">Data Orang Tua:</h4>
-        <p><strong>Nama Ayah:</strong> {{ user.nama_ayah or '-' }}</p>
-        <p><strong>Nama Ibu:</strong> {{ user.nama_ibu or '-' }}</p>
-
-        <h4 class="mt-4">Dokumen:</h4>
-        <div class="row">
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h5>Ijazah</h5>
-              </div>
-              <div class="card-body text-center">
-                {% if user.ijasah %}
-                  <img src="{{ url_for('static', filename='uploads/' + user.ijasah) }}" class="img-fluid mb-2" alt="Ijazah" style="max-height: 300px;">
-                  <div>
-                    <a href="{{ url_for('static', filename='uploads/' + user.ijasah) }}" class="btn btn-info" target="_blank">Lihat Full</a>
-                  </div>
-                {% else %}
-                  <p class="text-muted">Belum ada ijazah</p>
-                {% endif %}
-              </div>
+      <!-- Right Sidebar -->
+      <div class="col-md-4">
+        <!-- Status dan Aksi -->
+        <div class="info-section mb-4">
+          <h4 class="mb-4"><i class="fas fa-tasks mr-2"></i>Status & Aksi</h4>
+          {% if user.status == 'pending' %}
+            <div class="alert alert-info">
+              <i class="fas fa-info-circle mr-2"></i>Siswa ini menunggu verifikasi
             </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="card">
-              <div class="card-header">
-                <h5>Foto Diri</h5>
-              </div>
-              <div class="card-body text-center">
-                {% if user.foto_diri %}
-                  <img src="{{ url_for('static', filename='uploads/' + user.foto_diri) }}" class="img-fluid mb-2" alt="Foto Diri" style="max-height: 300px;">
-                  <div>
-                    <a href="{{ url_for('static', filename='uploads/' + user.foto_diri) }}" class="btn btn-info" target="_blank">Lihat Full</a>
-                  </div>
-                {% else %}
-                  <p class="text-muted">Belum ada foto diri</p>
-                {% endif %}
-              </div>
+            <form action="/admin/accept/{{ user.id }}" method="POST" class="mb-2">
+              <button type="submit" class="btn btn-success btn-block btn-lg">
+                <i class="fas fa-check-circle mr-2"></i>Terima Pendaftaran
+              </button>
+            </form>
+            <form action="/admin/reject/{{ user.id }}" method="POST">
+              <button type="submit" class="btn btn-danger btn-block btn-lg">
+                <i class="fas fa-times-circle mr-2"></i>Tolak Pendaftaran
+              </button>
+            </form>
+          {% elif user.status == 'accepted' %}
+            <div class="alert alert-success">
+              <i class="fas fa-check-circle mr-2"></i>Siswa ini telah diterima
             </div>
-          </div>
+          {% elif user.status == 'rejected' %}
+            <div class="alert alert-danger">
+              <i class="fas fa-times-circle mr-2"></i>Siswa ini telah ditolak
+            </div>
+          {% endif %}
         </div>
 
-        <h4 class="mt-4">Status Pembayaran:</h4>
-        <div class="card mb-4">
-          <div class="card-body">
-            <p><strong>Status Pembayaran:</strong> 
-              <span class="badge badge-{{ 'success' if user.payment_status == 'paid' else 'warning' if user.payment_status == 'pending' else 'danger' }}">
-                {{ user.payment_status|default('Belum Bayar') }}
-              </span>
-            </p>
-            {% if user.payment_proof %}
-              <p><strong>Bukti Pembayaran:</strong></p>
-              <img src="/static/uploads/{{ user.payment_proof }}" class="img-fluid mb-2" style="max-height: 300px;">
-              <div>
-                <a href="/static/uploads/{{ user.payment_proof }}" class="btn btn-info" target="_blank">Lihat Full</a>
-                {% if user.payment_status == 'pending' %}
-                  <form action="{{ url_for('verify_payment', user_id=user.id) }}" method="POST" class="d-inline">
-                    <button type="submit" class="btn btn-success">Verifikasi Pembayaran</button>
-                  </form>
-                {% endif %}
-              </div>
-            {% else %}
-              <p class="text-muted">Belum ada bukti pembayaran</p>
-            {% endif %}
+        <!-- Status Pembayaran -->
+        <div class="info-section">
+          <h4 class="mb-4"><i class="fas fa-money-bill-wave mr-2"></i>Status Pembayaran</h4>
+          <div class="info-item">
+            <div class="info-label">Status</div>
+            <span class="badge badge-{{ 'success' if user.payment_status == 'paid' else 'warning' if user.payment_status == 'pending' else 'danger' }}">
+              {{ user.payment_status|default('BELUM BAYAR')|upper }}
+            </span>
           </div>
+          {% if user.payment_proof %}
+            <div class="mt-3">
+              <label>Bukti Pembayaran:</label>
+              <img src="/static/uploads/{{ user.payment_proof }}" class="img-fluid doc-preview mb-3" alt="Bukti Pembayaran">
+              {% if user.payment_status == 'pending' %}
+                <form action="{{ url_for('verify_payment', user_id=user.id) }}" method="POST">
+                  <button type="submit" class="btn btn-success btn-block">
+                    <i class="fas fa-check-circle mr-2"></i>Verifikasi Pembayaran
+                  </button>
+                </form>
+              {% endif %}
+            </div>
+          {% endif %}
         </div>
 
-        {% if user.status == 'pending' %}
-          <form action="/admin/accept/{{ user.id }}" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-success">Terima Siswa</button>
-          </form>
-          <form action="/admin/reject/{{ user.id }}" method="POST" style="display:inline;">
-            <button type="submit" class="btn btn-danger ml-2">Tolak Siswa</button>
-          </form>
-        {% elif user.status == 'accepted' %}
-          <div class="alert alert-success">
-            <strong>Status:</strong> Siswa ini telah diterima. Menunggu proses daftar ulang.
-          </div>
-        {% endif %}
-        <a href="/admin_dashboard" class="btn btn-secondary mt-3">Kembali</a>
+        <!-- Dokumen -->
+        <div class="info-section">
+          <h4 class="mb-4"><i class="fas fa-file-alt mr-2"></i>Dokumen</h4>
+          {% if user.ijasah %}
+            <div class="mb-3">
+              <label>Ijazah:</label>
+              <img src="{{ url_for('static', filename='uploads/' + user.ijasah) }}" class="img-fluid doc-preview" alt="Ijazah">
+            </div>
+          {% endif %}
+          {% if user.foto_diri %}
+            <div>
+              <label>Foto Diri:</label>
+              <img src="{{ url_for('static', filename='uploads/' + user.foto_diri) }}" class="img-fluid doc-preview" alt="Foto Diri">
+            </div>
+          {% endif %}
+        </div>
       </div>
     </div>
+
+    <a href="/admin_dashboard" class="btn btn-secondary mt-4">
+      <i class="fas fa-arrow-left mr-2"></i>Kembali ke Dashboard
+    </a>
   </div>
 </body>
 </html>
